@@ -189,7 +189,7 @@ optimized-calculator/
 ### Configuração do Ambiente
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/optimized-calculator.git
+git clone https://github.com/julioamorimdev/optimized-calculator.git
 cd optimized-calculator
 
 # Crie um ambiente virtual (opcional)
@@ -249,9 +249,9 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 Se você encontrar algum problema ou tiver sugestões:
 
-- 📧 **Email**: seu-email@exemplo.com
-- 🐛 **Issues**: [GitHub Issues](https://github.com/seu-usuario/optimized-calculator/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/seu-usuario/optimized-calculator/discussions)
+- 📧 **Email**: julio@grupojpc.com.br
+- 🐛 **Issues**: [GitHub Issues](https://github.com/julioamorimdev/optimized-calculator/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/julioamorimdev/optimized-calculator/discussions)
 
 ## 📈 Roadmap
 
