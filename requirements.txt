@@ -1,0 +1,11 @@
+# Calculadora Otimizada - Dependências
+# Versão mínima do Python: 3.7
+
+# Dependências principais
+# (Nenhuma dependência externa necessária - usa apenas bibliotecas padrão do Python)
+
+# Para desenvolvimento (opcional)
+# pytest>=6.0.0
+# black>=21.0.0
+# flake8>=3.8.0
+# mypy>=0.800 

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧮 Calculadora Otimizada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5em;
+            color: #333;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .expression {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+            min-height: 20px;
+        }
+
+        .result {
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            border: none;
+            border-radius: 15px;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 7px 7px 15px #d1d1d1, -7px -7px 15px #ffffff;
+        }
+
+        .button:active {
+            transform: translateY(0);
+            box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff;
+        }
+
+        .operator {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+            color: white;
+            box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
+        }
+
+        .equals {
+            background: linear-gradient(145deg, #4ecdc4, #44a08d);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .clear {
+            background: linear-gradient(145deg, #ffa726, #ff9800);
+            color: white;
+        }
+
+        .function {
+            background: linear-gradient(145deg, #ab47bc, #8e24aa);
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .special-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .special-button {
+            background: linear-gradient(145deg, #42a5f5, #1976d2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .special-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .history {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.8em;
+        }
+
+        .history h3 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .history-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .button {
+                padding: 12px;
+                font-size: 1em;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="header">
+            <h1>🧮 Calculadora Otimizada</h1>
+            <p>Versão 2.0.0 - Interface Web</p>
+        </div>
+
+        <div class="display">
+            <div class="expression" id="expression"></div>
+            <div class="result" id="result">0</div>
+        </div>
+
+        <div class="special-buttons">
+            <button class="special-button" onclick="showHistory()">📋 Histórico</button>
+            <button class="special-button" onclick="clearHistory()">🗑️ Limpar</button>
+        </div>
+
+        <div class="buttons-grid">
+            <button class="button function" onclick="addToExpression('sin(')">sin</button>
+            <button class="button function" onclick="addToExpression('cos(')">cos</button>
+            <button class="button function" onclick="addToExpression('tan(')">tan</button>
+            <button class="button clear" onclick="clearDisplay()">C</button>
+
+            <button class="button function" onclick="addToExpression('sqrt(')">√</button>
+            <button class="button function" onclick="addToExpression('log(')">log</button>
+            <button class="button function" onclick="addToExpression('ln(')">ln</button>
+            <button class="button operator" onclick="addToExpression('/')">÷</button>
+
+            <button class="button" onclick="addToExpression('7')">7</button>
+            <button class="button" onclick="addToExpression('8')">8</button>
+            <button class="button" onclick="addToExpression('9')">9</button>
+            <button class="button operator" onclick="addToExpression('*')">×</button>
+
+            <button class="button" onclick="addToExpression('4')">4</button>
+            <button class="button" onclick="addToExpression('5')">5</button>
+            <button class="button" onclick="addToExpression('6')">6</button>
+            <button class="button operator" onclick="addToExpression('-')">−</button>
+
+            <button class="button" onclick="addToExpression('1')">1</button>
+            <button class="button" onclick="addToExpression('2')">2</button>
+            <button class="button" onclick="addToExpression('3')">3</button>
+            <button class="button operator" onclick="addToExpression('+')">+</button>
+
+            <button class="button" onclick="addToExpression('0')">0</button>
+            <button class="button" onclick="addToExpression('.')">.</button>
+            <button class="button" onclick="addToExpression('(')">(</button>
+            <button class="button" onclick="addToExpression(')')">)</button>
+
+            <button class="button function" onclick="addToExpression('pi')">π</button>
+            <button class="button function" onclick="addToExpression('e')">e</button>
+            <button class="button function" onclick="addToExpression('**')">^</button>
+            <button class="button equals" onclick="calculate()">=</button>
+        </div>
+
+        <div class="history" id="history" style="display: none;">
+            <h3>📋 Histórico de Cálculos</h3>
+            <div id="historyContent"></div>
+        </div>
+
+        <div class="footer">
+            <p>Desenvolvido com ❤️ | <a href="https://github.com/seu-usuario/optimized-calculator" target="_blank">GitHub</a></p>
+        </div>
+    </div>
+
+    <script>
+        let currentExpression = '';
+        let history = [];
+        let memory = {};
+
+        // Funções matemáticas disponíveis
+        const mathFunctions = {
+            sin: Math.sin,
+            cos: Math.cos,
+            tan: Math.tan,
+            sqrt: Math.sqrt,
+            log: Math.log10,
+            ln: Math.log,
+            exp: Math.exp,
+            abs: Math.abs,
+            round: Math.round,
+            floor: Math.floor,
+            ceil: Math.ceil,
+            pi: Math.PI,
+            e: Math.E
+        };
+
+        function addToExpression(value) {
+            currentExpression += value;
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentExpression = '';
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('expression').textContent = currentExpression;
+            document.getElementById('result').textContent = currentExpression || '0';
+        }
+
+        function calculate() {
+            if (!currentExpression) return;
+
+            try {
+                // Substitui símbolos especiais
+                let expression = currentExpression
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/−/g, '-')
+                    .replace(/\^/g, '**');
+
+                // Cria um contexto seguro para avaliação
+                const context = { ...mathFunctions, ...memory };
+                
+                // Função de avaliação segura
+                const result = evaluateExpression(expression, context);
+                
+                // Adiciona ao histórico
+                addToHistory(currentExpression, result);
+                
+                // Atualiza o display
+                document.getElementById('result').textContent = result;
+                currentExpression = result.toString();
+                
+            } catch (error) {
+                document.getElementById('result').textContent = 'Erro';
+                document.getElementById('result').className = 'result error';
+                setTimeout(() => {
+                    document.getElementById('result').className = 'result';
+                }, 2000);
+            }
+        }
+
+        function evaluateExpression(expression, context) {
+            // Validação básica de segurança
+            const allowedChars = /^[0-9+\-*/().\s,abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_]+$/;
+            if (!allowedChars.test(expression)) {
+                throw new Error('Caracteres não permitidos');
+            }
+
+            // Substitui funções matemáticas
+            let safeExpression = expression;
+            for (const [funcName, func] of Object.entries(context)) {
+                if (typeof func === 'function') {
+                    const regex = new RegExp(`\\b${funcName}\\s*\\(`, 'g');
+                    safeExpression = safeExpression.replace(regex, `context['${funcName}'](`);
+                }
+            }
+
+            // Avalia a expressão
+            return Function('context', `return ${safeExpression}`)(context);
+        }
+
+        function addToHistory(expression, result) {
+            history.push({
+                expression: expression,
+                result: result,
+                timestamp: new Date().toLocaleTimeString()
+            });
+
+            // Mantém apenas os últimos 10 cálculos
+            if (history.length > 10) {
+                history.shift();
+            }
+        }
+
+        function showHistory() {
+            const historyDiv = document.getElementById('history');
+            const historyContent = document.getElementById('historyContent');
+            
+            if (historyDiv.style.display === 'none') {
+                historyContent.innerHTML = '';
+                
+                if (history.length === 0) {
+                    historyContent.innerHTML = '<p style="text-align: center; color: #666;">Nenhum cálculo no histórico</p>';
+                } else {
+                    history.forEach((item, index) => {
+                        const historyItem = document.createElement('div');
+                        historyItem.className = 'history-item';
+                        historyItem.innerHTML = `
+                            <span>${item.expression}</span>
+                            <span class="success">= ${item.result}</span>
+                        `;
+                        historyContent.appendChild(historyItem);
+                    });
+                }
+                
+                historyDiv.style.display = 'block';
+            } else {
+                historyDiv.style.display = 'none';
+            }
+        }
+
+        function clearHistory() {
+            history = [];
+            document.getElementById('history').style.display = 'none';
+            document.getElementById('result').textContent = 'Histórico limpo!';
+            document.getElementById('result').className = 'result success';
+            setTimeout(() => {
+                document.getElementById('result').className = 'result';
+                updateDisplay();
+            }, 2000);
+        }
+
+        // Suporte a teclado
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            if (key >= '0' && key <= '9' || key === '.') {
+                addToExpression(key);
+            } else if (key === '+') {
+                addToExpression('+');
+            } else if (key === '-') {
+                addToExpression('-');
+            } else if (key === '*') {
+                addToExpression('*');
+            } else if (key === '/') {
+                addToExpression('/');
+            } else if (key === '(') {
+                addToExpression('(');
+            } else if (key === ')') {
+                addToExpression(')');
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                currentExpression = currentExpression.slice(0, -1);
+                updateDisplay();
+            }
+        });
+
+        // Inicialização
+        updateDisplay();
+    </script>
+</body>
+</html> 
